@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.actionzh.spring_security_demo.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.actionzh.spring_security_demo.domain.User">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="tenant_id" property="tenantId" jdbcType="BIGINT"/>
+        <result column="version" property="version" jdbcType="BIGINT"/>
+        <result column="date_created" property="dateCreated" jdbcType="TIMESTAMP" javaType="DateTime"/>
+        <result column="last_updated" property="lastUpdated" jdbcType="TIMESTAMP" javaType="DateTime"/>
+        <result column="instance_id" property="instanceId" jdbcType="VARCHAR"/>
+        <result column="trigger_id" property="triggerId" jdbcType="VARCHAR"/>
+        <result column="contact_id" property="contactId" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, tenant_id, version, date_created, last_updated, instance_id, trigger_id, contact_id
+    </sql>
+
+    <select id="findOne" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM customer_journey_instance
+        WHERE id = #{id}
+    </select>
+
+    <select id="countByTriggerId" resultType="java.lang.Long">
+        SELECT count(1)
+        FROM customer_journey_instance
+        WHERE tenant_id = #{tenantId} AND trigger_id = #{triggerId}
+    </select>
+
+    <insert id="insert" parameterType="io.naza.flow.entity.CustomerJourneyInstance" useGeneratedKeys="true"
+            keyProperty="id">
+       INSERT INTO
+       		customer_journey_instance
+       		(tenant_id, version, date_created, last_updated, instance_id, trigger_id, contact_id)
+       	VALUES
+       		(#{tenantId}, 0, now(), now(), #{instanceId}, #{triggerId}, #{contactId})
+    </insert>
+
+    <delete id="delete" parameterType="java.lang.Long">
+       DELETE FROM
+       customer_journey_instance
+       WHERE
+       id = #{id}
+    </delete>
+
+</mapper>
