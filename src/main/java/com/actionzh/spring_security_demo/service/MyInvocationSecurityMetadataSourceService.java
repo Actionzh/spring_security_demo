@@ -18,7 +18,6 @@ public class MyInvocationSecurityMetadataSourceService implements FilterInvocati
 
     @Autowired
     private PermissionMapper permissionMapper;
-
     /**
      * 每一个资源所需要的角色 Collection<ConfigAttribute>决策器会用到
      */
